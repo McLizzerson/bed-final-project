@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// GENERAL NOTE TO SELF
+// what should be unique, name/ email/ phonenumber?
+// phonenumber string or number?
+// URL also string?
+
+// Model amenities
+model Amenitiy {
+  id              String @id @default(uuid())
+  name            String
+
+  properties      Property[]
+}
+
+// Models users
+model User {
+  id              String @id @default(uuid())
+  username        String @unique
+  password        String
+  name            String 
+  email           String 
+  phoneNumber     String 
+  profilePicture  String
+
+  reviews         Review[]
+  bookings        Booking[]
+}
+
+// Model hosts
+model Host {
+  id              String @id @default(uuid())
+  username        String @unique
+  password        String
+  name            String
+  email           String 
+  phoneNumber     String
+  profilePicture  String
+  aboutMe         String
+
+  // relations
+  properties      Property[]
+}
+
+// Model properties
+// rating is it really an int?
+model Property {
+  id              String @id @default(uuid())
+  title           String
+  description     String
+  location        String
+  pricePerNight   Decimal  @db.Decimal(10, 2) 
+  bedroomCount    Int
+  bathRoomCount   Int
+  maxGuestCount   Int
+  rating          Int
+
+  reviews         Review[]
+  amenities       Amenitiy[]
+  bookings        Booking[]
+
+  // relation, have to connect this!
+  hostId          String 
+  host Host @relation(fields: [hostId], references: [id])
+  @@index([hostId])
+}
+
+// Model reviews
+model Review {
+  id            String @id @default(uuid())
+  comment       String 
+  rating        Int
+
+  // relations
+  userId        String
+  propertyId    String
+
+  user User @relation(fields: [userId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+
+  @@index([userId])
+  @@index([propertyId])
+}
+
+// Model bookings
+model Booking {
+  id              String @id @default(uuid())
+  checkinDate     DateTime
+  checkoutDate    DateTime
+  numberOfGuests  Int
+  totalPrice      Decimal @db.Decimal(10, 2)
+  bookingStatus   String
+
+  userId          String
+  propertyId      String
+
+  user User @relation(fields: [userId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+
+  @@index([userId])
+  @@index([propertyId])    
+}
+
+// Perhaps we also need an enum ItemType? Check!
