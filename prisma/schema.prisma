@@ -4,6 +4,7 @@
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")  
   relationMode = "prisma"
 }
 
@@ -11,13 +12,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// GENERAL NOTE TO SELF
-// what should be unique, name/ email/ phonenumber?
-// phonenumber string or number?
-// URL also string?
-
 // Model amenities
-model Amenitiy {
+model Amenity {
   id              String @id @default(uuid())
   name            String
 
@@ -54,7 +50,6 @@ model Host {
 }
 
 // Model properties
-// rating is it really an int?
 model Property {
   id              String @id @default(uuid())
   title           String
@@ -67,10 +62,9 @@ model Property {
   rating          Int
 
   reviews         Review[]
-  amenities       Amenitiy[]
+  amenities       Amenity[]
   bookings        Booking[]
 
-  // relation, have to connect this!
   hostId          String 
   host Host @relation(fields: [hostId], references: [id])
   @@index([hostId])
@@ -111,5 +105,3 @@ model Booking {
   @@index([userId])
   @@index([propertyId])    
 }
-
-// Perhaps we also need an enum ItemType? Check!
