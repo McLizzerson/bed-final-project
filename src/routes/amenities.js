@@ -1,4 +1,6 @@
 import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
+
 import getAmenities from "../services/amenities/getAmenities.js";
 import createAmenity from "../services/amenities/createAmenity.js";
 import getAmenityById from "../services/amenities/getAmenityById.js";
@@ -16,7 +18,7 @@ amenityRouter.get("/", async (req, res, next) => {
   }
 });
 
-amenityRouter.post("/", async (req, res, next) => {
+amenityRouter.post("/", authMiddleware, async (req, res, next) => {
   try {
     const { name } = req.body;
     const newAmenity = await createAmenity(name);
@@ -36,7 +38,7 @@ amenityRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-amenityRouter.put("/:id", async (req, res, next) => {
+amenityRouter.put("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
@@ -47,7 +49,7 @@ amenityRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-amenityRouter.delete("/:id", async (req, res, next) => {
+amenityRouter.delete("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedAmenity = await deleteAmenity(id);
