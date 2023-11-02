@@ -3,6 +3,7 @@ import "dotenv/config";
 import amenityRouter from "./routes/amenities.js";
 import userRouter from "./routes/users.js";
 import hostRouter from "./routes/hosts.js";
+import reviewRouter from "./routes/reviews.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 app.use("/users", userRouter);
 app.use("/amenities", amenityRouter);
 app.use("/hosts", hostRouter);
+app.use("/reviews", reviewRouter);
 
 // Error handling below
 
