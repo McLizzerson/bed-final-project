@@ -11,7 +11,8 @@ const userRouter = express.Router();
 
 userRouter.get("/", async (req, res, next) => {
   try {
-    const users = await getUsers();
+    const { username, email } = req.query;
+    const users = await getUsers(username, email);
     res.status(200).json(users);
   } catch (error) {
     next(error);
