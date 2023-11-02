@@ -5,6 +5,7 @@ import userRouter from "./routes/users.js";
 import hostRouter from "./routes/hosts.js";
 import reviewRouter from "./routes/reviews.js";
 import propertyRouter from "./routes/properties.js";
+import bookingRouter from "./routes/bookings.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use("/amenities", amenityRouter);
 app.use("/hosts", hostRouter);
 app.use("/reviews", reviewRouter);
 app.use("/properties", propertyRouter);
+app.use("/bookings", bookingRouter);
 
 // Error handling below
 
