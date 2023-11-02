@@ -1,4 +1,6 @@
 import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
+
 import getProperties from "../services/properties/getProperties.js";
 import createProperty from "../services/properties/createproperty.js";
 import getPropertyById from "../services/properties/getpropertyById.js";
@@ -16,7 +18,7 @@ propertyRouter.get("/", async (req, res, next) => {
   }
 });
 
-propertyRouter.post("/", async (req, res, next) => {
+propertyRouter.post("/", authMiddleware, async (req, res, next) => {
   try {
     const {
       title,
@@ -56,7 +58,7 @@ propertyRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-propertyRouter.put("/:id", async (req, res, next) => {
+propertyRouter.put("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -88,7 +90,7 @@ propertyRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-propertyRouter.delete("/:id", async (req, res, next) => {
+propertyRouter.delete("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedProperty = await deleteProperty(id);

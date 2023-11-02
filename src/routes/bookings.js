@@ -1,4 +1,6 @@
 import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
+
 import getBookings from "../services/bookings/getBookings.js";
 import createBooking from "../services/bookings/createBooking.js";
 import getBookingById from "../services/bookings/getBookingById.js";
@@ -16,7 +18,7 @@ bookingRouter.get("/", async (req, res, next) => {
   }
 });
 
-bookingRouter.post("/", async (req, res, next) => {
+bookingRouter.post("/", authMiddleware, async (req, res, next) => {
   try {
     const {
       userId,
@@ -52,7 +54,7 @@ bookingRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-bookingRouter.put("/:id", async (req, res, next) => {
+bookingRouter.put("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -80,7 +82,7 @@ bookingRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-bookingRouter.delete("/:id", async (req, res, next) => {
+bookingRouter.delete("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedBooking = await deleteBooking(id);

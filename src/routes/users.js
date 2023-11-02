@@ -1,4 +1,6 @@
 import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
+
 import getUsers from "../services/users/getUsers.js";
 import createUser from "../services/users/createUser.js";
 import getUserById from "../services/users/getUserById.js";
@@ -16,7 +18,7 @@ userRouter.get("/", async (req, res, next) => {
   }
 });
 
-userRouter.post("/", async (req, res, next) => {
+userRouter.post("/", authMiddleware, async (req, res, next) => {
   try {
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
@@ -44,7 +46,7 @@ userRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-userRouter.put("/:id", async (req, res, next) => {
+userRouter.put("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
@@ -64,7 +66,7 @@ userRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-userRouter.delete("/:id", async (req, res, next) => {
+userRouter.delete("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedUser = await deleteUser(id);
