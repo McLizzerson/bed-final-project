@@ -6,6 +6,7 @@ import hostRouter from "./routes/hosts.js";
 import reviewRouter from "./routes/reviews.js";
 import propertyRouter from "./routes/properties.js";
 import bookingRouter from "./routes/bookings.js";
+import loginRouter from "./routes/login.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
+app.use("/login", loginRouter);
 app.use("/users", userRouter);
 app.use("/amenities", amenityRouter);
 app.use("/hosts", hostRouter);
