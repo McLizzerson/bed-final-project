@@ -1,17 +1,17 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const getReviewById = async (id) => {
   const prisma = new PrismaClient();
 
-  const uniqueReview = prisma.review.findUnique({
+  const uniqueReview = await prisma.review.findUnique({
     where: {
       id: id,
     },
   });
 
-  //   implement error handling of not found!
   if (!uniqueReview) {
-    console.log("oops something went wrong");
+    throw new NotFoundError("review", id);
   }
   return uniqueReview;
 };

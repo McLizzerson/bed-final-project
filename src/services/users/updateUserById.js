@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const updateUserById = async (
   id,
@@ -25,12 +26,8 @@ const updateUserById = async (
     },
   });
 
-  console.log(updatedUser);
-
-  //    implement error handling
-  // id not found
   if (!updatedUser || updatedUser.count === 0) {
-    console.log("something went wrong!");
+    throw new NotFoundError("user", id);
   }
   return {
     message: `User with id: ${id}, was updated succesfully!`,

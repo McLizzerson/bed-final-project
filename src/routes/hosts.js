@@ -1,5 +1,6 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
+import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
 import getHosts from "../services/hosts/getHosts.js";
 import createHost from "../services/hosts/createHost.js";
@@ -45,54 +46,68 @@ hostRouter.post("/", authMiddleware, async (req, res, next) => {
   }
 });
 
-hostRouter.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const host = await getHostById(id);
-    res.status(200).json(host);
-  } catch (error) {
-    next(error);
-  }
-});
+hostRouter.get(
+  "/:id",
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const host = await getHostById(id);
+      res.status(200).json(host);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
-hostRouter.put("/:id", authMiddleware, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const {
-      username,
-      password,
-      name,
-      email,
-      phoneNumber,
-      profilePicture,
-      aboutMe,
-    } = req.body;
-    const updatedHost = await updateHostById(
-      id,
-      username,
-      password,
-      name,
-      email,
-      phoneNumber,
-      profilePicture,
-      aboutMe
-    );
-    res.status(200).json(updatedHost);
-  } catch (error) {
-    next(error);
-  }
-});
+hostRouter.put(
+  "/:id",
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const {
+        username,
+        password,
+        name,
+        email,
+        phoneNumber,
+        profilePicture,
+        aboutMe,
+      } = req.body;
+      const updatedHost = await updateHostById(
+        id,
+        username,
+        password,
+        name,
+        email,
+        phoneNumber,
+        profilePicture,
+        aboutMe
+      );
+      res.status(200).json(updatedHost);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
-hostRouter.delete("/:id", authMiddleware, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const deletedHost = await deleteHost(id);
-    res.status(200).json({
-      message: `Host with id: ${deletedHost} was deleted succesfully!`,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+hostRouter.delete(
+  "/:id",
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const deletedHost = await deleteHost(id);
+      res.status(200).json({
+        message: `Host with id: ${deletedHost} was deleted succesfully!`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
 export default hostRouter;

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const deleteReview = async (id) => {
   const prisma = new PrismaClient();
@@ -9,9 +10,8 @@ const deleteReview = async (id) => {
     },
   });
 
-  //   Implement 404 not found!
   if (!deletedReview || deletedReview.count === 0) {
-    console.log("oops, this review wasn't found!");
+    throw new NotFoundError("review", id);
   }
 
   return id;

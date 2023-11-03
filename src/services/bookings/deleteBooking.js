@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const deleteBooking = async (id) => {
   const prisma = new PrismaClient();
@@ -9,9 +10,8 @@ const deleteBooking = async (id) => {
     },
   });
 
-  //   Implement 404 not found!
   if (!deletedBooking || deletedBooking.count === 0) {
-    console.log("oops this booking was not found!");
+    throw new NotFoundError("booking", id);
   }
 
   return id;

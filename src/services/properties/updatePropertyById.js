@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const updatePropertyById = async (
   id,
@@ -31,9 +32,8 @@ const updatePropertyById = async (
     },
   });
 
-  //   implement error handling
   if (!updatedProperty || updatedProperty.count === 0) {
-    console.log("couldn't find this property");
+    throw new NotFoundError("property", id);
   }
 
   return {

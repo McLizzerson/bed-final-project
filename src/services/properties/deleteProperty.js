@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const deleteProperty = async (id) => {
   const prisma = new PrismaClient();
@@ -9,9 +10,8 @@ const deleteProperty = async (id) => {
     },
   });
 
-  //   Implement 404 not found!
   if (!deletedProperty || deletedProperty.count === 0) {
-    console.log("oops this property was not found!");
+    throw new NotFoundError("property", id);
   }
 
   return id;

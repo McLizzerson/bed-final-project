@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const getHostById = async (id) => {
   const prisma = new PrismaClient();
@@ -9,9 +10,8 @@ const getHostById = async (id) => {
     },
   });
 
-  //   implement error handling
   if (!host) {
-    console.log("oops! user not found");
+    throw new NotFoundError("host", id);
   }
 
   return host;

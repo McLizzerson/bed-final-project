@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const deleteHost = async (id) => {
   const prisma = new PrismaClient();
@@ -9,9 +10,8 @@ const deleteHost = async (id) => {
     },
   });
 
-  //   implement error handling!
   if (!deletedHost || deletedHost.count === 0) {
-    console.log("oops host not found?");
+    throw new NotFoundError("host", id);
   }
   return id;
 };

@@ -1,5 +1,6 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
+import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
 import getUsers from "../services/users/getUsers.js";
 import createUser from "../services/users/createUser.js";
@@ -37,46 +38,60 @@ userRouter.post("/", authMiddleware, async (req, res, next) => {
   }
 });
 
-userRouter.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const user = await getUserById(id);
-    res.status(200).json(user);
-  } catch (error) {
-    next(error);
-  }
-});
+userRouter.get(
+  "/:id",
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = await getUserById(id);
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
-userRouter.put("/:id", authMiddleware, async (req, res, next) => {
-  try {
-    const { username, password, name, email, phoneNumber, profilePicture } =
-      req.body;
-    const { id } = req.params;
-    const updatedUser = await updateUserById(
-      id,
-      username,
-      password,
-      name,
-      email,
-      phoneNumber,
-      profilePicture
-    );
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    next(error);
-  }
-});
+userRouter.put(
+  "/:id",
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { username, password, name, email, phoneNumber, profilePicture } =
+        req.body;
+      const { id } = req.params;
+      const updatedUser = await updateUserById(
+        id,
+        username,
+        password,
+        name,
+        email,
+        phoneNumber,
+        profilePicture
+      );
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
-userRouter.delete("/:id", authMiddleware, async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const deletedUser = await deleteUser(id);
-    res.status(200).json({
-      message: `User with id:${deletedUser} was deleted succesfully`,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+userRouter.delete(
+  "/:id",
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const deletedUser = await deleteUser(id);
+      res.status(200).json({
+        message: `User with id:${deletedUser}, was deleted succesfully`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
 export default userRouter;
