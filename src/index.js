@@ -10,10 +10,11 @@ import propertyRouter from "./routes/properties.js";
 import bookingRouter from "./routes/bookings.js";
 import loginRouter from "./routes/login.js";
 import errorHandler from "./middleware/errorHandler.js";
+import logMiddleware from "./middleware/logMiddleware.js";
 
 const app = express();
 
-// Sentry code
+// Initialize Sentry
 Sentry.init({
   dsn: "https://4585695cbf24560b06f56dc800b26c5a@o4505986791047168.ingest.sentry.io/4506161634607104",
   integrations: [
@@ -24,21 +25,17 @@ Sentry.init({
   ],
   tracesSampleRate: 1.0,
 });
-
 // The request handler must be the first middleware on the app
 app.use(Sentry.Handlers.requestHandler());
-
 // TracingHandler creates a trace for every incoming request
 app.use(Sentry.Handlers.tracingHandler());
 
 // Main body of app
 app.use(express.json());
+app.use(logMiddleware);
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
-});
-app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("My first Sentry error!");
 });
 
 app.use("/login", loginRouter);
@@ -54,7 +51,6 @@ app.use("/bookings", bookingRouter);
 app.use(Sentry.Handlers.errorHandler());
 app.use(errorHandler);
 
-// End
 app.listen(3000, () => {
   console.log("Server is listening on port 3000");
 });
