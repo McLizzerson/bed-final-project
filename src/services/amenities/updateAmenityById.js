@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const updateAmenityById = async (id, name) => {
   const prisma = new PrismaClient();
 
-  const updatedAmenity = prisma.amenity.updateMany({
+  const updatedAmenity = await prisma.amenity.updateMany({
     where: {
       id: id,
     },
@@ -12,8 +13,9 @@ const updateAmenityById = async (id, name) => {
     },
   });
 
-  //   implement error handling
-  // id not found
+  if (!updatedAmenity || updatedAmenity.count === 0) {
+    throw new NotFoundError("amenity", id);
+  }
 
   return {
     message: `Amenity with id: ${id}, was updated succesfully!`,

@@ -1,15 +1,20 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const getAmenityById = async (id) => {
   const prisma = new PrismaClient();
 
-  return prisma.amenity.findUnique({
+  const uniqueAmenity = await prisma.amenity.findUnique({
     where: {
       id: id,
     },
   });
 
-  //   implement error handling of not found!
+  if (!uniqueAmenity) {
+    throw new NotFoundError("amenity", id);
+  }
+
+  return uniqueAmenity;
 };
 
 export default getAmenityById;

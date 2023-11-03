@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import NotFoundError from "../../error/notFoundError.js";
 
 const deleteAmenity = async (id) => {
   const prisma = new PrismaClient();
@@ -9,10 +10,9 @@ const deleteAmenity = async (id) => {
     },
   });
 
-  //   Implement 404 not found!
-  //   if (!deleteBook || deleteBook.count === 0) {
-  //     throw new NotFoundError("Category", id);
-  //   }
+  if (!deletedAmenity || deletedAmenity.count === 0) {
+    throw new NotFoundError("amenity", id);
+  }
 
   return id;
 };
