@@ -7,6 +7,7 @@ import reviewRouter from "./routes/reviews.js";
 import propertyRouter from "./routes/properties.js";
 import bookingRouter from "./routes/bookings.js";
 import loginRouter from "./routes/login.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/properties", propertyRouter);
 app.use("/bookings", bookingRouter);
 
 // Error handling below
+app.use(errorHandler);
 
 // End
 app.listen(3000, () => {
