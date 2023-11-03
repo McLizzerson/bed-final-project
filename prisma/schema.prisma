@@ -24,7 +24,7 @@ model Amenity {
 model User {
   id              String @id @default(uuid())
   username        String @unique
-  password        String
+  password        String 
   name            String 
   email           String 
   phoneNumber     String 
